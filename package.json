@@ -1,0 +1,47 @@
+{
+  "name": "@salesforge/forge-cli",
+  "version": "0.1.0",
+  "description": "CLI and MCP server for the Salesforge product suite",
+  "type": "module",
+  "bin": {
+    "forge": "./dist/index.js",
+    "forge-cli": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck"
+  },
+  "keywords": [
+    "salesforge",
+    "forge",
+    "mcp",
+    "cli",
+    "mailforge",
+    "primeforge",
+    "leadsforge",
+    "infraforge",
+    "warmforge"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.7.0"
+  }
+}
