@@ -1,5 +1,5 @@
 import { CliError } from "./errors.js";
-import { getProduct, SALESFORGE_CORE_BASE_URL, SALESFORGE_MULTICHANNEL_BASE_URL, } from "./types.js";
+import { getProduct, } from "./types.js";
 export class ApiExecutor {
     keys;
     timeoutMs;
@@ -18,7 +18,7 @@ export class ApiExecutor {
                 exitCode: 3,
             });
         }
-        const url = buildUrl(this.baseUrlFor(request), request.path, request.query);
+        const url = buildUrl(product.baseUrl, request.path, request.query);
         const headers = {
             Authorization: product.authScheme === "bearer" ? withBearerPrefix(key) : key,
             Accept: request.raw ? "*/*" : "application/json",
@@ -75,14 +75,6 @@ export class ApiExecutor {
         if (!text.trim())
             return undefined;
         return JSON.parse(text);
-    }
-    baseUrlFor(request) {
-        if (request.product === "salesforge" && request.salesforgeApi === "multichannel") {
-            return SALESFORGE_MULTICHANNEL_BASE_URL;
-        }
-        if (request.product === "salesforge")
-            return SALESFORGE_CORE_BASE_URL;
-        return getProduct(request.product).baseUrl;
     }
 }
 function buildUrl(baseUrl, path, query) {

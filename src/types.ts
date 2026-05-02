@@ -25,7 +25,6 @@ export interface ProductDefinition {
 export const DEFAULT_PROFILE = "default";
 
 export const SALESFORGE_CORE_BASE_URL = "https://api.salesforge.ai/public/v2";
-export const SALESFORGE_MULTICHANNEL_BASE_URL = "https://multichannel-api.salesforge.ai/public";
 
 export const PRODUCTS: readonly ProductDefinition[] = [
   {
@@ -116,7 +115,6 @@ export interface ApiRequest {
   query?: Record<string, unknown>;
   body?: unknown;
   raw?: boolean;
-  salesforgeApi?: "core" | "multichannel";
 }
 
 export interface CommandDefinition {
