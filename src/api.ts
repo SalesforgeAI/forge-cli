@@ -32,7 +32,7 @@ export class ApiExecutor {
       });
     }
 
-    const url = buildUrl(product.baseUrl, request.path, request.query);
+    const url = buildUrl(request.baseUrl ?? product.baseUrl, request.path, request.query);
     const headers: Record<string, string> = {
       Authorization: product.authScheme === "bearer" ? withBearerPrefix(key) : key,
       Accept: request.raw ? "*/*" : "application/json",

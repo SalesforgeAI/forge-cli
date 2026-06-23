@@ -4,6 +4,7 @@ import {
   clean,
   cmd,
   encStr,
+  multichannelApi,
   omit,
   pagingParams,
   param,
@@ -59,12 +60,21 @@ export function salesforgeCommands(): CommandDefinition[] {
       params: [
         param("workspaceId", "string", true, "Workspace ID"),
         ...pagingParams,
-        param("tagIds", "string", false, "Comma-separated tag IDs"),
-        param("validationStatus", "string", false, "Validation status filter"),
+        param("tagIds", "array", false, "Tag IDs to filter by"),
+        param("validationStatuses", "array", false, "Validation statuses to filter by: safe, invalid, disabled, disposable, inbox_full, catch_all, role_account, spamtrap, unknown, unvalidated"),
+        param("notInSequenceId", "string", false, "Filter to contacts not enrolled in this sequence ID"),
+        param("hasValidLinkedIn", "boolean", false, "Filter to contacts that have a valid LinkedIn URL"),
+        param("notInEsps", "array", false, "Exclude contacts whose email domain belongs to these ESPs"),
       ],
-      request: (a) => salesforgeApi("GET", `/workspaces/${encStr(a.workspaceId)}/contacts`, {
-        query: pick(a, ["limit", "offset", "tagIds", "validationStatus"]),
-      }),
+      request: (a) => {
+        const query = pick(a, ["limit", "offset"]);
+        if (a.notInSequenceId !== undefined) query.not_in_sequence_id = a.notInSequenceId;
+        if (a.hasValidLinkedIn !== undefined) query.has_valid_linkedin = a.hasValidLinkedIn;
+        appendArrayQuery(query, "tag_ids[]", a.tagIds);
+        appendArrayQuery(query, "validation_statuses[]", a.validationStatuses);
+        appendArrayQuery(query, "not_in_esps[]", a.notInEsps);
+        return salesforgeApi("GET", `/workspaces/${encStr(a.workspaceId)}/contacts`, { query });
+      },
     }),
     cmd({
       name: "create_contact",
@@ -287,7 +297,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "list",
       description: "List multichannel sequences in a workspace.",
       params: [param("workspaceId", "string", true), ...pagingParams],
-      request: (a) => salesforgeApi("GET", `/multichannel/workspaces/${encStr(a.workspaceId)}/sequences`, { query: pick(a, ["limit", "offset"]) }),
+      request: (a) => multichannelApi("GET", `/multichannel/workspaces/${encStr(a.workspaceId)}/sequences`, { query: pick(a, ["limit", "offset"]) }),
     }),
     cmd({
       name: "create_sequence",
@@ -296,7 +306,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "create",
       description: "Create a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("name", "string", true), param("description"), param("timezone")],
-      request: (a) => salesforgeApi("POST", `/multichannel/workspaces/${encStr(a.workspaceId)}/sequences`, { body: omit(a, ["workspaceId"]) }),
+      request: (a) => multichannelApi("POST", `/multichannel/workspaces/${encStr(a.workspaceId)}/sequences`, { body: omit(a, ["workspaceId"]) }),
     }),
     cmd({
       name: "get_sequence",
@@ -305,7 +315,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "get",
       description: "Get multichannel sequence details.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("GET", seqPath(a)),
+      request: (a) => multichannelApi("GET", seqPath(a)),
     }),
     cmd({
       name: "update_sequence",
@@ -314,7 +324,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "update",
       description: "Update a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("name"), param("description"), param("timezone")],
-      request: (a) => salesforgeApi("PATCH", seqPath(a), { body: omit(a, ["workspaceId", "sequenceId"]) }),
+      request: (a) => multichannelApi("PATCH", seqPath(a), { body: omit(a, ["workspaceId", "sequenceId"]) }),
     }),
     cmd({
       name: "delete_sequence",
@@ -323,7 +333,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "delete",
       description: "Delete a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("DELETE", seqPath(a)),
+      request: (a) => multichannelApi("DELETE", seqPath(a)),
     }),
     cmd({
       name: "launch_sequence",
@@ -332,7 +342,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "launch",
       description: "Launch a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("PATCH", `${seqPath(a)}/launch`, { body: {} }),
+      request: (a) => multichannelApi("PATCH", `${seqPath(a)}/launch`, { body: {} }),
     }),
     cmd({
       name: "set_sequence_status",
@@ -341,7 +351,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "status",
       description: "Set sequence status to active or paused.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("status", "string", true)],
-      request: (a) => salesforgeApi("PATCH", `${seqPath(a)}/status`, { body: pick(a, ["status"]) }),
+      request: (a) => multichannelApi("PATCH", `${seqPath(a)}/status`, { body: pick(a, ["status"]) }),
     }),
     cmd({
       name: "get_sequence_schedule",
@@ -350,7 +360,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "schedule",
       description: "Get sequence schedule.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("GET", `${seqPath(a)}/schedule`),
+      request: (a) => multichannelApi("GET", `${seqPath(a)}/schedule`),
     }),
     cmd({
       name: "update_sequence_schedule",
@@ -359,7 +369,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "update-schedule",
       description: "Update sequence schedule.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("timezone", "string", true), param("schedule", "object", true)],
-      request: (a) => salesforgeApi("PUT", `${seqPath(a)}/schedule`, { body: pick(a, ["timezone", "schedule"]) }),
+      request: (a) => multichannelApi("PUT", `${seqPath(a)}/schedule`, { body: pick(a, ["timezone", "schedule"]) }),
     }),
     cmd({
       name: "get_sequence_settings",
@@ -368,7 +378,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "settings",
       description: "Get sequence settings.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("GET", `${seqPath(a)}/settings`),
+      request: (a) => multichannelApi("GET", `${seqPath(a)}/settings`),
     }),
     cmd({
       name: "update_sequence_settings",
@@ -377,7 +387,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "update-settings",
       description: "Update sequence settings.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("settings", "object", true)],
-      request: (a) => salesforgeApi("PATCH", `${seqPath(a)}/settings`, { body: a.settings }),
+      request: (a) => multichannelApi("PATCH", `${seqPath(a)}/settings`, { body: a.settings }),
     }),
     cmd({
       name: "list_sequence_branches",
@@ -386,7 +396,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "list",
       description: "List branches in a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("GET", `${seqPath(a)}/branches`),
+      request: (a) => multichannelApi("GET", `${seqPath(a)}/branches`),
     }),
     cmd({
       name: "list_sequence_nodes",
@@ -395,7 +405,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "list",
       description: "List nodes in a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("GET", `${seqPath(a)}/nodes`),
+      request: (a) => multichannelApi("GET", `${seqPath(a)}/nodes`),
     }),
     cmd({
       name: "get_sequence_node",
@@ -404,7 +414,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "get",
       description: "Get a sequence node.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("nodeId", "string", true)],
-      request: (a) => salesforgeApi("GET", `${seqPath(a)}/nodes/${encStr(a.nodeId)}`),
+      request: (a) => multichannelApi("GET", `${seqPath(a)}/nodes/${encStr(a.nodeId)}`),
     }),
     cmd({
       name: "create_action_node",
@@ -413,7 +423,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "create-action",
       description: "Create an action node in a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("branchId", "number", true), param("actionId", "number", true), param("waitDays", "number"), param("variants", "array"), param("distributionStrategy")],
-      request: (a) => salesforgeApi("POST", `${seqPath(a)}/nodes/actions`, { body: clean(pick(a, ["branchId", "actionId", "waitDays", "variants", "distributionStrategy"])) }),
+      request: (a) => multichannelApi("POST", `${seqPath(a)}/nodes/actions`, { body: clean(pick(a, ["branchId", "actionId", "waitDays", "variants", "distributionStrategy"])) }),
     }),
     cmd({
       name: "update_action_node",
@@ -422,7 +432,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "update-action",
       description: "Update an action node.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("nodeId", "string", true), param("wait_in_minutes", "number"), param("variants", "array"), param("distributionStrategy")],
-      request: (a) => salesforgeApi("PATCH", `${seqPath(a)}/nodes/actions/${encStr(a.nodeId)}`, { body: clean(pick(a, ["wait_in_minutes", "variants", "distributionStrategy"])) }),
+      request: (a) => multichannelApi("PATCH", `${seqPath(a)}/nodes/actions/${encStr(a.nodeId)}`, { body: clean(pick(a, ["wait_in_minutes", "variants", "distributionStrategy"])) }),
     }),
     cmd({
       name: "create_condition_node",
@@ -431,7 +441,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "create-condition",
       description: "Create a condition node in a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("branchId", "number", true), param("conditionId", "number", true), param("minutesToWait", "number"), param("distributionStrategy")],
-      request: (a) => salesforgeApi("POST", `${seqPath(a)}/nodes/conditions`, { body: clean(pick(a, ["branchId", "conditionId", "minutesToWait", "distributionStrategy"])) }),
+      request: (a) => multichannelApi("POST", `${seqPath(a)}/nodes/conditions`, { body: clean(pick(a, ["branchId", "conditionId", "minutesToWait", "distributionStrategy"])) }),
     }),
     cmd({
       name: "delete_sequence_node",
@@ -440,7 +450,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "delete",
       description: "Delete a sequence node.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("nodeId", "string", true)],
-      request: (a) => salesforgeApi("DELETE", `${seqPath(a)}/nodes/${encStr(a.nodeId)}`),
+      request: (a) => multichannelApi("DELETE", `${seqPath(a)}/nodes/${encStr(a.nodeId)}`),
     }),
     cmd({
       name: "list_action_types",
@@ -448,7 +458,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       group: "reference",
       subcommand: "actions",
       description: "List action types for sequence nodes.",
-      request: () => salesforgeApi("GET", "/multichannel/actions"),
+      request: () => multichannelApi("GET", "/multichannel/actions"),
     }),
     cmd({
       name: "list_condition_types",
@@ -456,7 +466,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       group: "reference",
       subcommand: "conditions",
       description: "List condition types for sequence branching.",
-      request: () => salesforgeApi("GET", "/multichannel/conditions"),
+      request: () => multichannelApi("GET", "/multichannel/conditions"),
     }),
     cmd({
       name: "list_sender_profiles",
@@ -465,7 +475,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "list",
       description: "List sender profiles in a workspace.",
       params: [param("workspaceId", "string", true)],
-      request: (a) => salesforgeApi("GET", senderProfilesPath(a)),
+      request: (a) => multichannelApi("GET", senderProfilesPath(a)),
     }),
     cmd({
       name: "update_sender_profile",
@@ -474,7 +484,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "update",
       description: "Update a sender profile.",
       params: [param("workspaceId", "string", true), param("senderProfileId", "string", true), param("updates", "object", true)],
-      request: (a) => salesforgeApi("PATCH", senderProfilesPath(a, "senderProfileId"), { body: a.updates }),
+      request: (a) => multichannelApi("PATCH", senderProfilesPath(a, "senderProfileId"), { body: a.updates }),
     }),
     cmd({
       name: "delete_sender_profile",
@@ -483,7 +493,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "delete",
       description: "Delete a sender profile.",
       params: [param("workspaceId", "string", true), param("senderProfileId", "string", true)],
-      request: (a) => salesforgeApi("DELETE", senderProfilesPath(a, "senderProfileId")),
+      request: (a) => multichannelApi("DELETE", senderProfilesPath(a, "senderProfileId")),
     }),
     cmd({
       name: "list_sequence_sender_profiles",
@@ -492,7 +502,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "sequence-list",
       description: "List sender profiles assigned to a sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true)],
-      request: (a) => salesforgeApi("GET", `${seqPath(a)}/sender-profiles`),
+      request: (a) => multichannelApi("GET", `${seqPath(a)}/sender-profiles`),
     }),
     cmd({
       name: "assign_sender_profiles_to_sequence",
@@ -501,7 +511,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "assign",
       description: "Assign sender profiles to a sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("senderProfileIds", "array", true)],
-      request: (a) => salesforgeApi("POST", `${seqPath(a)}/sender-profiles`, { body: pick(a, ["senderProfileIds"]) }),
+      request: (a) => multichannelApi("POST", `${seqPath(a)}/sender-profiles`, { body: pick(a, ["senderProfileIds"]) }),
     }),
     cmd({
       name: "remove_sender_profiles_from_sequence",
@@ -510,7 +520,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "remove",
       description: "Remove sender profiles from a sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("senderProfileIds", "array", true)],
-      request: (a) => salesforgeApi("POST", `${seqPath(a)}/sender-profiles/remove`, { body: pick(a, ["senderProfileIds"]) }),
+      request: (a) => multichannelApi("POST", `${seqPath(a)}/sender-profiles/remove`, { body: pick(a, ["senderProfileIds"]) }),
     }),
     cmd({
       name: "enroll_contacts",
@@ -519,7 +529,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "create",
       description: "Enroll contacts into a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("filters", "object", true), param("limit", "number")],
-      request: (a) => salesforgeApi("POST", `${seqPath(a)}/enrollments`, { body: clean(pick(a, ["filters", "limit"])) }),
+      request: (a) => multichannelApi("POST", `${seqPath(a)}/enrollments`, { body: clean(pick(a, ["filters", "limit"])) }),
     }),
     cmd({
       name: "remove_enrollments",
@@ -528,7 +538,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "remove",
       description: "Remove contacts from a multichannel sequence.",
       params: [param("workspaceId", "string", true), param("sequenceId", "string", true), param("filters", "object", true)],
-      request: (a) => salesforgeApi("POST", `${seqPath(a)}/enrollments/remove`, { body: pick(a, ["filters"]) }),
+      request: (a) => multichannelApi("POST", `${seqPath(a)}/enrollments/remove`, { body: pick(a, ["filters"]) }),
     }),
     cmd({
       name: "start_email_validation",
@@ -536,8 +546,8 @@ export function salesforgeCommands(): CommandDefinition[] {
       group: "validations",
       subcommand: "start",
       description: "Start an email validation run.",
-      params: [param("workspaceId", "string", true), param("filters", "object")],
-      request: (a) => salesforgeApi("POST", `/multichannel/workspaces/${encStr(a.workspaceId)}/validations`, { body: a.filters ? { filters: a.filters } : {} }),
+      params: [param("workspaceId", "string", true), param("filters", "object", true)],
+      request: (a) => multichannelApi("POST", `/multichannel/workspaces/${encStr(a.workspaceId)}/validations`, { body: { filters: a.filters } }),
     }),
     cmd({
       name: "get_validation_results",
@@ -546,7 +556,7 @@ export function salesforgeCommands(): CommandDefinition[] {
       subcommand: "results",
       description: "Get email validation run results.",
       params: [param("workspaceId", "string", true), param("runId", "string", true)],
-      request: (a) => salesforgeApi("GET", `/multichannel/workspaces/${encStr(a.workspaceId)}/validations/${encStr(a.runId)}/results`),
+      request: (a) => multichannelApi("GET", `/multichannel/workspaces/${encStr(a.workspaceId)}/validations/${encStr(a.runId)}/results`),
     }),
   ];
 }

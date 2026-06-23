@@ -1,4 +1,5 @@
 import type { ApiRequest, CommandDefinition, JsonObject, ParamDefinition, ProductId } from "../types.js";
+import { SALESFORGE_MULTICHANNEL_BASE_URL } from "../types.js";
 
 const enc = encodeURIComponent;
 
@@ -38,6 +39,10 @@ export function param(name: string, type: ParamDefinition["type"] = "string", re
 
 export function salesforgeApi(method: ApiRequest["method"], path: string, options: Partial<ApiRequest> = {}): ApiRequest {
   return { product: "salesforge", method, path, ...options };
+}
+
+export function multichannelApi(method: ApiRequest["method"], path: string, options: Partial<ApiRequest> = {}): ApiRequest {
+  return { product: "salesforge", method, path, baseUrl: SALESFORGE_MULTICHANNEL_BASE_URL, ...options };
 }
 
 export function api(product: ProductId, method: ApiRequest["method"], path: string, options: Partial<ApiRequest> = {}): ApiRequest {
@@ -81,8 +86,9 @@ export function encStr(value: unknown): string {
 }
 
 export function appendArrayQuery(query: JsonObject, key: string, value: unknown): void {
-  if (!Array.isArray(value)) return;
-  query[key] = value.map(String);
+  if (value === undefined || value === null) return;
+  const items = Array.isArray(value) ? value : [value];
+  query[key] = items.map(String);
 }
 
 export function assertEnrichment(args: ReqArgs): JsonObject {
