@@ -31,12 +31,14 @@ export async function startMcpServer(options = {}) {
         registeredCount += 1;
         server.registerTool(command.name, {
             description: command.description,
-            inputSchema: zodShape(command),
+            inputSchema: command.inputSchema ?? zodShape(command),
         }, async (args) => {
             try {
                 const input = args;
                 validateCommandArgs(command, input);
-                const result = await executor.execute(command.request(input));
+                const result = command.execute
+                    ? await command.execute(input, (request) => executor.execute(request))
+                    : await executor.execute(command.request(input));
                 return {
                     content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
                 };

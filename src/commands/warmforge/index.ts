@@ -1,20 +1,22 @@
-import type { CommandDefinition, ProductId } from "../../types.js";
-import { api, cmd, encStr, param, pick } from "../common.js";
+import type { CommandDefinition } from "../../types.js";
+import { productEndpoint } from "../suite-endpoint.js";
 
 export function warmforgeCommands(): CommandDefinition[] {
-  const product: ProductId = "warmforge";
   return [
-    cmd({ name: "warmforge_list_mailboxes", product, group: "mailboxes", subcommand: "list", description: "List Warmforge mailboxes.", params: [param("page", "number", true), param("page_size", "number", true), param("search"), param("status"), param("external_reference")], request: (a) => api(product, "GET", "/mailboxes", { query: pick(a, ["page", "page_size", "search", "status", "external_reference"]) }) }),
-    cmd({ name: "warmforge_get_mailbox", product, group: "mailboxes", subcommand: "get", description: "Get a Warmforge mailbox by email.", params: [param("address", "string", true)], request: (a) => api(product, "GET", `/mailboxes/${encStr(a.address)}`) }),
-    cmd({ name: "warmforge_connect_smtp_mailbox", product, group: "mailboxes", subcommand: "connect-smtp", description: "Connect an SMTP mailbox.", params: [param("body", "object", true)], request: (a) => api(product, "POST", "/mailboxes/connect-smtp", { body: a.body }) }),
-    cmd({ name: "warmforge_connect_oauth2_mailbox", product, group: "mailboxes", subcommand: "connect-oauth2", description: "Connect an OAuth2 mailbox.", params: [param("body", "object", true)], request: (a) => api(product, "POST", "/mailboxes/connect-oauth2", { body: a.body }) }),
-    cmd({ name: "warmforge_update_mailbox", product, group: "mailboxes", subcommand: "update", description: "Update a Warmforge mailbox.", params: [param("address", "string", true), param("body", "object", true)], request: (a) => api(product, "PATCH", `/mailboxes/${encStr(a.address)}`, { body: a.body }) }),
-    cmd({ name: "warmforge_bulk_update_mailboxes", product, group: "mailboxes", subcommand: "bulk-update", description: "Bulk update Warmforge mailboxes.", params: [param("body", "object", true)], request: (a) => api(product, "POST", "/mailboxes/bulk-update", { body: a.body }) }),
-    cmd({ name: "warmforge_delete_mailbox", product, group: "mailboxes", subcommand: "delete", description: "Delete a Warmforge mailbox.", params: [param("address", "string", true)], request: (a) => api(product, "DELETE", `/mailboxes/${encStr(a.address)}`) }),
-    cmd({ name: "warmforge_get_mailbox_warmup_stats", product, group: "mailboxes", subcommand: "warmup-stats", description: "Get Warmforge mailbox warmup stats.", params: [param("address", "string", true)], request: (a) => api(product, "GET", `/mailboxes/${encStr(a.address)}/warmup/stats`) }),
-    cmd({ name: "warmforge_create_placement_test", product, group: "placement-tests", subcommand: "create", description: "Create a placement test.", params: [param("body", "object", true)], request: (a) => api(product, "POST", "/placement-tests", { body: a.body }) }),
-    cmd({ name: "warmforge_list_placement_tests", product, group: "placement-tests", subcommand: "list", description: "List placement tests.", params: [param("page", "number", true), param("size", "number", true), param("search"), param("external_reference")], request: (a) => api(product, "GET", "/placement-tests", { query: pick(a, ["page", "size", "search", "external_reference"]) }) }),
-    cmd({ name: "warmforge_get_placement_test", product, group: "placement-tests", subcommand: "get", description: "Get a placement test.", params: [param("placementTestID", "string", true)], request: (a) => api(product, "GET", `/placement-tests/${encStr(a.placementTestID)}`) }),
-    cmd({ name: "warmforge_delete_placement_test", product, group: "placement-tests", subcommand: "delete", description: "Delete a placement test.", params: [param("placementTestID", "string", true)], request: (a) => api(product, "DELETE", `/placement-tests/${encStr(a.placementTestID)}`) }),
+    productEndpoint("warmforge", "warmforge_list_workspaces", "workspaces", "list", "GET", "/workspaces", {"required":["page","page_size"]}),
+    productEndpoint("warmforge", "warmforge_create_workspace", "workspaces", "create", "POST", "/workspaces", {"required":["name"]}),
+    productEndpoint("warmforge", "warmforge_list_mailboxes", "mailboxes", "list", "GET", "/workspaces/{workspaceID}/mailboxes", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["page","page_size"]}),
+    productEndpoint("warmforge", "warmforge_get_mailbox", "mailboxes", "get", "GET", "/workspaces/{workspaceID}/mailboxes/{address}", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["address"]}),
+    productEndpoint("warmforge", "warmforge_connect_smtp_mailbox", "mailboxes", "connect-smtp", "POST", "/workspaces/{workspaceID}/mailboxes/connect-smtp", {"legacyWorkspace":true,"bodyKey":"body","names":{"workspaceID":"workspaceId"},"required":["body"]}),
+    productEndpoint("warmforge", "warmforge_connect_oauth2_mailbox", "mailboxes", "connect-oauth2", "POST", "/workspaces/{workspaceID}/mailboxes/connect-oauth2", {"legacyWorkspace":true,"bodyKey":"body","names":{"workspaceID":"workspaceId"},"required":["body"]}),
+    productEndpoint("warmforge", "warmforge_update_mailbox", "mailboxes", "update", "PATCH", "/workspaces/{workspaceID}/mailboxes/{address}", {"legacyWorkspace":true,"bodyKey":"body","names":{"workspaceID":"workspaceId"},"required":["address","body"]}),
+    productEndpoint("warmforge", "warmforge_bulk_update_mailboxes", "mailboxes", "bulk-update", "POST", "/workspaces/{workspaceID}/mailboxes/bulk-update", {"legacyWorkspace":true,"bodyKey":"body","names":{"workspaceID":"workspaceId"},"required":["body"]}),
+    productEndpoint("warmforge", "warmforge_delete_mailbox", "mailboxes", "delete", "DELETE", "/workspaces/{workspaceID}/mailboxes/{address}", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["address"]}),
+    productEndpoint("warmforge", "warmforge_get_mailbox_warmup_stats", "mailboxes", "warmup-stats", "GET", "/workspaces/{workspaceID}/mailboxes/{address}/warmup/stats", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["address","from","to"]}),
+    productEndpoint("warmforge", "warmforge_create_placement_test", "placement-tests", "create", "POST", "/workspaces/{workspaceID}/placement-tests", {"legacyWorkspace":true,"bodyKey":"body","names":{"workspaceID":"workspaceId"},"required":["body"]}),
+    productEndpoint("warmforge", "warmforge_list_placement_tests", "placement-tests", "list", "GET", "/workspaces/{workspaceID}/placement-tests", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["page","size"]}),
+    productEndpoint("warmforge", "warmforge_get_placement_test", "placement-tests", "get", "GET", "/workspaces/{workspaceID}/placement-tests/{placementTestID}", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["placementTestID"]}),
+    productEndpoint("warmforge", "warmforge_delete_placement_test", "placement-tests", "delete", "DELETE", "/workspaces/{workspaceID}/placement-tests/{placementTestID}", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["placementTestID"]}),
+    productEndpoint("warmforge", "warmforge_get_latest_mailbox_placement_results", "placement-tests", "latest-mailbox-results", "POST", "/workspaces/{workspaceID}/mailboxes/placement-results/latest", {"legacyWorkspace":true,"names":{"workspaceID":"workspaceId"},"required":["mailboxIds"]}),
   ];
 }

@@ -1,0 +1,1352 @@
+[
+  {
+    "name": "list_sequence_branches",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "list_contacts",
+    "inputs": [
+      "workspaceId",
+      "limit",
+      "offset",
+      "tagIds",
+      "validationStatuses",
+      "notInSequenceId",
+      "hasValidLinkedIn",
+      "notInEsps"
+    ]
+  },
+  {
+    "name": "create_contact",
+    "inputs": [
+      "workspaceId",
+      "firstName",
+      "lastName",
+      "email",
+      "company",
+      "position",
+      "linkedinUrl",
+      "tags",
+      "tagIds",
+      "customVars"
+    ]
+  },
+  {
+    "name": "update_contact",
+    "inputs": [
+      "workspaceId",
+      "firstName",
+      "lastName",
+      "email",
+      "company",
+      "position",
+      "linkedinUrl",
+      "tags",
+      "tagIds",
+      "customVars"
+    ]
+  },
+  {
+    "name": "bulk_create_contacts",
+    "inputs": [
+      "workspaceId",
+      "contacts"
+    ]
+  },
+  {
+    "name": "bulk_update_contacts",
+    "inputs": [
+      "workspaceId",
+      "contacts"
+    ]
+  },
+  {
+    "name": "get_contact",
+    "inputs": [
+      "workspaceId",
+      "contactId"
+    ]
+  },
+  {
+    "name": "delete_contact",
+    "inputs": [
+      "workspaceId",
+      "contactId"
+    ]
+  },
+  {
+    "name": "bulk_delete_contacts",
+    "inputs": [
+      "workspaceId",
+      "contactIds"
+    ]
+  },
+  {
+    "name": "list_custom_variables",
+    "inputs": [
+      "workspaceId"
+    ]
+  },
+  {
+    "name": "add_dnc_entries",
+    "inputs": [
+      "workspaceId",
+      "dncs"
+    ]
+  },
+  {
+    "name": "enroll_contacts",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "filters",
+      "limit"
+    ]
+  },
+  {
+    "name": "preflight_enrollments",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "filters",
+      "limit",
+      "selectionScope"
+    ]
+  },
+  {
+    "name": "preview_enrollment_move",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "preflightId",
+      "moveSourceSequenceIds",
+      "skipReplied"
+    ]
+  },
+  {
+    "name": "confirm_enrollment_preflight",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "preflightId",
+      "action",
+      "moveSourceSequenceIds",
+      "skipReplied"
+    ]
+  },
+  {
+    "name": "remove_enrollments",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "filters",
+      "limit"
+    ]
+  },
+  {
+    "name": "get_me",
+    "inputs": []
+  },
+  {
+    "name": "connect_linkedin_account",
+    "inputs": [
+      "workspaceId",
+      "email",
+      "password",
+      "proxy",
+      "firstName",
+      "lastName",
+      "linkedinUrl",
+      "skipSenderProfile"
+    ]
+  },
+  {
+    "name": "get_linkedin_account",
+    "inputs": [
+      "workspaceId",
+      "linkedinAccountId"
+    ]
+  },
+  {
+    "name": "submit_linkedin_account_otp",
+    "inputs": [
+      "workspaceId",
+      "linkedinAccountId",
+      "code"
+    ]
+  },
+  {
+    "name": "disconnect_linkedin_account",
+    "inputs": [
+      "workspaceId",
+      "linkedinAccountId"
+    ]
+  },
+  {
+    "name": "reconnect_linkedin_account",
+    "inputs": [
+      "workspaceId",
+      "linkedinAccountId",
+      "email",
+      "password",
+      "proxy",
+      "firstName",
+      "lastName"
+    ]
+  },
+  {
+    "name": "list_mailboxes",
+    "inputs": [
+      "workspaceId",
+      "limit",
+      "offset",
+      "search",
+      "status"
+    ]
+  },
+  {
+    "name": "get_mailbox",
+    "inputs": [
+      "workspaceId",
+      "mailboxId"
+    ]
+  },
+  {
+    "name": "download_email_attachments",
+    "inputs": [
+      "workspaceId",
+      "mailboxId",
+      "emailId"
+    ]
+  },
+  {
+    "name": "download_email_attachment",
+    "inputs": [
+      "workspaceId",
+      "mailboxId",
+      "emailId",
+      "contentId"
+    ]
+  },
+  {
+    "name": "reply_to_email",
+    "inputs": [
+      "workspaceId",
+      "mailboxId",
+      "emailId",
+      "body",
+      "includeHistory",
+      "cc",
+      "bcc"
+    ]
+  },
+  {
+    "name": "delete_mailbox",
+    "inputs": [
+      "workspaceId",
+      "mailboxId"
+    ]
+  },
+  {
+    "name": "update_mailbox_connection_settings",
+    "inputs": [
+      "workspaceId",
+      "mailboxId",
+      "smtp",
+      "imap"
+    ]
+  },
+  {
+    "name": "list_sequence_nodes",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "get_sequence_node",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "nodeId"
+    ]
+  },
+  {
+    "name": "create_action_node",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "branchId",
+      "actionId",
+      "waitDays",
+      "variants",
+      "distributionStrategy"
+    ]
+  },
+  {
+    "name": "update_action_node",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "nodeId",
+      "wait_in_minutes",
+      "variants",
+      "distributionStrategy"
+    ]
+  },
+  {
+    "name": "create_condition_node",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "branchId",
+      "conditionId",
+      "minutesToWait",
+      "distributionStrategy"
+    ]
+  },
+  {
+    "name": "delete_sequence_node",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "nodeId"
+    ]
+  },
+  {
+    "name": "list_action_types",
+    "inputs": []
+  },
+  {
+    "name": "list_condition_types",
+    "inputs": []
+  },
+  {
+    "name": "create_sender_profile",
+    "inputs": [
+      "workspaceId",
+      "name",
+      "mailboxIds",
+      "linkedinAccountId"
+    ]
+  },
+  {
+    "name": "bulk_create_sender_profiles",
+    "inputs": [
+      "workspaceId",
+      "profiles"
+    ]
+  },
+  {
+    "name": "list_sender_profiles",
+    "inputs": [
+      "workspaceId"
+    ]
+  },
+  {
+    "name": "update_sender_profile",
+    "inputs": [
+      "workspaceId",
+      "senderProfileId",
+      "updates"
+    ]
+  },
+  {
+    "name": "delete_sender_profile",
+    "inputs": [
+      "workspaceId",
+      "senderProfileId"
+    ]
+  },
+  {
+    "name": "list_sequence_sender_profiles",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "assign_sender_profiles_to_sequence",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "senderProfileIds"
+    ]
+  },
+  {
+    "name": "remove_sender_profiles_from_sequence",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "senderProfileIds"
+    ]
+  },
+  {
+    "name": "list_sequences",
+    "inputs": [
+      "workspaceId",
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "create_sequence",
+    "inputs": [
+      "workspaceId",
+      "name",
+      "description",
+      "timezone",
+      "kind"
+    ]
+  },
+  {
+    "name": "get_sequence",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "update_sequence",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "name",
+      "description",
+      "timezone"
+    ]
+  },
+  {
+    "name": "delete_sequence",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "launch_sequence",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "set_sequence_status",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "status"
+    ]
+  },
+  {
+    "name": "get_sequence_schedule",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "update_sequence_schedule",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "timezone",
+      "schedule"
+    ]
+  },
+  {
+    "name": "get_sequence_settings",
+    "inputs": [
+      "workspaceId",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "update_sequence_settings",
+    "inputs": [
+      "workspaceId",
+      "sequenceId",
+      "settings"
+    ]
+  },
+  {
+    "name": "create_subsequence",
+    "inputs": [
+      "workspaceId",
+      "parentSequenceId",
+      "name",
+      "labelId",
+      "description",
+      "timezone",
+      "priority"
+    ]
+  },
+  {
+    "name": "assign_subsequence",
+    "inputs": [
+      "workspaceId",
+      "parentSequenceId",
+      "childSequenceId",
+      "priority"
+    ]
+  },
+  {
+    "name": "create_subsequence_trigger",
+    "inputs": [
+      "workspaceId",
+      "subsequenceId",
+      "labelId",
+      "priority"
+    ]
+  },
+  {
+    "name": "list_subsequence_parents",
+    "inputs": [
+      "workspaceId",
+      "subsequenceId"
+    ]
+  },
+  {
+    "name": "list_subsequence_members",
+    "inputs": [
+      "workspaceId",
+      "subsequenceId",
+      "leadId",
+      "page",
+      "limit"
+    ]
+  },
+  {
+    "name": "list_subsequence_triggers",
+    "inputs": [
+      "workspaceId",
+      "subsequenceId"
+    ]
+  },
+  {
+    "name": "list_tags",
+    "inputs": [
+      "workspaceId",
+      "limit",
+      "offset",
+      "search",
+      "caseSensitive"
+    ]
+  },
+  {
+    "name": "list_primebox_threads",
+    "inputs": [
+      "workspaceId",
+      "positive",
+      "filter",
+      "labels",
+      "excludeLabels",
+      "mailboxIds",
+      "sequenceIds",
+      "searchQuery",
+      "limit",
+      "offset",
+      "isUnread"
+    ]
+  },
+  {
+    "name": "get_thread",
+    "inputs": [
+      "workspaceId",
+      "threadId"
+    ]
+  },
+  {
+    "name": "list_primebox_labels",
+    "inputs": [
+      "workspaceId",
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "update_thread_label",
+    "inputs": [
+      "workspaceId",
+      "threadId",
+      "labelId"
+    ]
+  },
+  {
+    "name": "start_email_validation",
+    "inputs": [
+      "workspaceId",
+      "filters",
+      "limit"
+    ]
+  },
+  {
+    "name": "get_validation_results",
+    "inputs": [
+      "workspaceId",
+      "runId"
+    ]
+  },
+  {
+    "name": "list_webhooks",
+    "inputs": [
+      "workspaceId"
+    ]
+  },
+  {
+    "name": "create_webhook",
+    "inputs": [
+      "workspaceId",
+      "name",
+      "url",
+      "type",
+      "sequenceId"
+    ]
+  },
+  {
+    "name": "get_webhook",
+    "inputs": [
+      "workspaceId",
+      "webhookId"
+    ]
+  },
+  {
+    "name": "list_workspaces",
+    "inputs": [
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "create_workspace",
+    "inputs": [
+      "name"
+    ]
+  },
+  {
+    "name": "get_workspace",
+    "inputs": [
+      "workspaceId"
+    ]
+  },
+  {
+    "name": "warmforge_list_mailboxes",
+    "inputs": [
+      "workspaceId",
+      "page",
+      "page_size",
+      "search",
+      "status",
+      "external_reference"
+    ]
+  },
+  {
+    "name": "warmforge_get_mailbox",
+    "inputs": [
+      "workspaceId",
+      "address"
+    ]
+  },
+  {
+    "name": "warmforge_connect_smtp_mailbox",
+    "inputs": [
+      "workspaceId",
+      "body"
+    ]
+  },
+  {
+    "name": "warmforge_connect_oauth2_mailbox",
+    "inputs": [
+      "workspaceId",
+      "body"
+    ]
+  },
+  {
+    "name": "warmforge_update_mailbox",
+    "inputs": [
+      "workspaceId",
+      "address",
+      "body"
+    ]
+  },
+  {
+    "name": "warmforge_bulk_update_mailboxes",
+    "inputs": [
+      "workspaceId",
+      "body"
+    ]
+  },
+  {
+    "name": "warmforge_delete_mailbox",
+    "inputs": [
+      "workspaceId",
+      "address"
+    ]
+  },
+  {
+    "name": "warmforge_get_mailbox_warmup_stats",
+    "inputs": [
+      "workspaceId",
+      "address",
+      "from",
+      "to"
+    ]
+  },
+  {
+    "name": "warmforge_create_placement_test",
+    "inputs": [
+      "workspaceId",
+      "body"
+    ]
+  },
+  {
+    "name": "warmforge_list_placement_tests",
+    "inputs": [
+      "workspaceId",
+      "page",
+      "size",
+      "search",
+      "external_reference"
+    ]
+  },
+  {
+    "name": "warmforge_get_latest_mailbox_placement_results",
+    "inputs": [
+      "workspaceId",
+      "mailboxIds"
+    ]
+  },
+  {
+    "name": "warmforge_get_placement_test",
+    "inputs": [
+      "workspaceId",
+      "placementTestID"
+    ]
+  },
+  {
+    "name": "warmforge_delete_placement_test",
+    "inputs": [
+      "workspaceId",
+      "placementTestID"
+    ]
+  },
+  {
+    "name": "warmforge_list_workspaces",
+    "inputs": [
+      "page",
+      "page_size"
+    ]
+  },
+  {
+    "name": "warmforge_create_workspace",
+    "inputs": [
+      "name"
+    ]
+  },
+  {
+    "name": "primeforge_list_domains",
+    "inputs": [
+      "workspaceId",
+      "search",
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "primeforge_get_domain",
+    "inputs": [
+      "id"
+    ]
+  },
+  {
+    "name": "primeforge_search_domains",
+    "inputs": [
+      "domain",
+      "check_google_workspace",
+      "check_ms365_workspace"
+    ]
+  },
+  {
+    "name": "primeforge_buy_domains",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "primeforge_delete_domain",
+    "inputs": [
+      "id"
+    ]
+  },
+  {
+    "name": "primeforge_get_domain_dns",
+    "inputs": [
+      "domainId"
+    ]
+  },
+  {
+    "name": "primeforge_bulk_dns_update",
+    "inputs": [
+      "domains",
+      "dmarcEmail",
+      "forwardToDomain"
+    ]
+  },
+  {
+    "name": "primeforge_create_mailboxes_for_domain",
+    "inputs": [
+      "domainId",
+      "workspaceId",
+      "mailboxes"
+    ]
+  },
+  {
+    "name": "primeforge_list_mailboxes",
+    "inputs": [
+      "workspaceId",
+      "domainId",
+      "email",
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "primeforge_get_mailboxes_by_ids",
+    "inputs": [
+      "mailboxIds"
+    ]
+  },
+  {
+    "name": "primeforge_get_mailboxes_by_addresses",
+    "inputs": [
+      "addresses"
+    ]
+  },
+  {
+    "name": "primeforge_get_mailbox",
+    "inputs": [
+      "id"
+    ]
+  },
+  {
+    "name": "primeforge_update_mailbox",
+    "inputs": [
+      "id",
+      "firstName",
+      "lastName",
+      "signature",
+      "forwardingEmail",
+      "profilePictureUrl"
+    ]
+  },
+  {
+    "name": "primeforge_delete_mailbox",
+    "inputs": [
+      "id"
+    ]
+  },
+  {
+    "name": "primeforge_list_prewarmed_mailboxes",
+    "inputs": []
+  },
+  {
+    "name": "primeforge_purchase_prewarmed_mailboxes",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "primeforge_list_workspaces",
+    "inputs": [
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "primeforge_create_workspace",
+    "inputs": [
+      "name"
+    ]
+  },
+  {
+    "name": "primeforge_get_workspace",
+    "inputs": [
+      "id"
+    ]
+  },
+  {
+    "name": "primeforge_delete_workspace",
+    "inputs": [
+      "id"
+    ]
+  },
+  {
+    "name": "primeforge_set_domain_forwarding",
+    "inputs": [
+      "workspaceId",
+      "forwardToDomain"
+    ]
+  },
+  {
+    "name": "primeforge_export_mailboxes",
+    "inputs": [
+      "workspaceId",
+      "exportType",
+      "search",
+      "includedIds",
+      "excludedIds"
+    ]
+  },
+  {
+    "name": "primeforge_export_to_salesforge",
+    "inputs": [
+      "workspaceId",
+      "exportType",
+      "includedIds",
+      "excludedIds"
+    ]
+  },
+  {
+    "name": "mailforge_list_domains",
+    "inputs": [
+      "status"
+    ]
+  },
+  {
+    "name": "mailforge_purchase_domains",
+    "inputs": [
+      "domains",
+      "workspaceId",
+      "contactDetails"
+    ]
+  },
+  {
+    "name": "mailforge_check_domain_availability",
+    "inputs": [
+      "domain"
+    ]
+  },
+  {
+    "name": "mailforge_check_domain_availability_bulk",
+    "inputs": [
+      "domains"
+    ]
+  },
+  {
+    "name": "mailforge_transfer_domains",
+    "inputs": [
+      "domains",
+      "workspaceId",
+      "dmarcEmail",
+      "forwardToDomain"
+    ]
+  },
+  {
+    "name": "mailforge_get_domain_dns",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "mailforge_update_domain_dns",
+    "inputs": [
+      "domainID",
+      "records"
+    ]
+  },
+  {
+    "name": "mailforge_bulk_dns_update",
+    "inputs": [
+      "domains",
+      "dmarcEmail",
+      "dmarcPolicy",
+      "forwardToDomain",
+      "removeENOMRecords"
+    ]
+  },
+  {
+    "name": "mailforge_enable_autorenew",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "mailforge_disable_autorenew",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "mailforge_bulk_enable_autorenew",
+    "inputs": [
+      "domainIds"
+    ]
+  },
+  {
+    "name": "mailforge_bulk_disable_autorenew",
+    "inputs": [
+      "domainIds"
+    ]
+  },
+  {
+    "name": "mailforge_update_domain_forwards",
+    "inputs": [
+      "forwards"
+    ]
+  },
+  {
+    "name": "mailforge_purchase_domain_masking",
+    "inputs": [
+      "domainIds",
+      "purchaseMasking",
+      "isYearly"
+    ]
+  },
+  {
+    "name": "mailforge_delete_domain_masking",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "mailforge_list_mailboxes",
+    "inputs": []
+  },
+  {
+    "name": "mailforge_get_mailbox",
+    "inputs": [
+      "mailboxID"
+    ]
+  },
+  {
+    "name": "mailforge_purchase_mailboxes",
+    "inputs": [
+      "mailboxes"
+    ]
+  },
+  {
+    "name": "mailforge_update_mailbox",
+    "inputs": [
+      "mailboxID",
+      "firstName",
+      "lastName",
+      "password",
+      "signature",
+      "forwardingEmail"
+    ]
+  },
+  {
+    "name": "mailforge_delete_mailbox",
+    "inputs": [
+      "mailboxID"
+    ]
+  },
+  {
+    "name": "mailforge_bulk_forward_mailboxes",
+    "inputs": [
+      "forwardingEmail",
+      "search",
+      "includedIds",
+      "excludedIds"
+    ]
+  },
+  {
+    "name": "mailforge_adjust_topup_amount",
+    "inputs": [
+      "amount"
+    ]
+  },
+  {
+    "name": "mailforge_list_workspaces",
+    "inputs": []
+  },
+  {
+    "name": "mailforge_create_workspace",
+    "inputs": [
+      "name"
+    ]
+  },
+  {
+    "name": "mailforge_update_workspace",
+    "inputs": [
+      "workspaceID",
+      "name"
+    ]
+  },
+  {
+    "name": "mailforge_delete_workspace",
+    "inputs": [
+      "workspaceID"
+    ]
+  },
+  {
+    "name": "leadsforge_enrich_emails",
+    "inputs": [
+      "personIDs",
+      "people",
+      "webhookURL",
+      "clientRequestID"
+    ]
+  },
+  {
+    "name": "leadsforge_enrich_phones",
+    "inputs": [
+      "personIDs",
+      "people",
+      "webhookURL",
+      "clientRequestID"
+    ]
+  },
+  {
+    "name": "leadsforge_enrich_linkedin",
+    "inputs": [
+      "personIDs",
+      "people",
+      "webhookURL",
+      "clientRequestID"
+    ]
+  },
+  {
+    "name": "leadsforge_get_enrichment_job",
+    "inputs": [
+      "jobID"
+    ]
+  },
+  {
+    "name": "leadsforge_get_enrichment_results",
+    "inputs": [
+      "jobID",
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "name": "leadsforge_search_lookalikes",
+    "inputs": [
+      "domains",
+      "locations",
+      "employeeRanges",
+      "fundingStages",
+      "categories",
+      "page",
+      "pageSize"
+    ]
+  },
+  {
+    "name": "leadsforge_get_seniority_filters",
+    "inputs": []
+  },
+  {
+    "name": "leadsforge_get_department_filters",
+    "inputs": []
+  },
+  {
+    "name": "leadsforge_get_employee_range_filters",
+    "inputs": []
+  },
+  {
+    "name": "leadsforge_get_balance",
+    "inputs": []
+  },
+  {
+    "name": "leadsforge_search",
+    "inputs": [
+      "leadLocations",
+      "companyLocations",
+      "companyIndustries",
+      "leadSeniorities",
+      "leadDepartments",
+      "leadJobTitles",
+      "leadIDs",
+      "companyIDs",
+      "companyDomains",
+      "companyNames",
+      "companyFundingRounds",
+      "companyTypes",
+      "companyRequired",
+      "companyKeywords",
+      "companyTechnologies",
+      "companyEmployeeNumberRange",
+      "leadTenure",
+      "companyFoundedYearRange",
+      "companyYearsInBusinessRange",
+      "companyRevenueRanges",
+      "maxContactsPerCompany",
+      "limit",
+      "cursor"
+    ]
+  },
+  {
+    "name": "infraforge_get_credit_balance",
+    "inputs": []
+  },
+  {
+    "name": "infraforge_create_credit_balance",
+    "inputs": [
+      "amount",
+      "isEnabled",
+      "topupThreshold"
+    ]
+  },
+  {
+    "name": "infraforge_update_credit_balance",
+    "inputs": [
+      "amount",
+      "isEnabled",
+      "topupThreshold"
+    ]
+  },
+  {
+    "name": "infraforge_check_domain_availability",
+    "inputs": [
+      "domain"
+    ]
+  },
+  {
+    "name": "infraforge_check_domain_availability_bulk",
+    "inputs": [
+      "domains"
+    ]
+  },
+  {
+    "name": "infraforge_list_domains",
+    "inputs": [
+      "workspaceId"
+    ]
+  },
+  {
+    "name": "infraforge_purchase_domains",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "infraforge_get_domain_dns",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "infraforge_update_domain_dns",
+    "inputs": [
+      "domainID",
+      "records"
+    ]
+  },
+  {
+    "name": "infraforge_bulk_dns_update",
+    "inputs": [
+      "domains",
+      "dmarcEmail",
+      "dmarcPolicy",
+      "forwardToDomain"
+    ]
+  },
+  {
+    "name": "infraforge_get_alternative_domains",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "infraforge_enable_autorenew",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "infraforge_disable_autorenew",
+    "inputs": [
+      "domainID"
+    ]
+  },
+  {
+    "name": "infraforge_list_mailboxes",
+    "inputs": [
+      "workspaceId",
+      "page",
+      "size",
+      "search"
+    ]
+  },
+  {
+    "name": "infraforge_get_mailbox",
+    "inputs": [
+      "mailboxID"
+    ]
+  },
+  {
+    "name": "infraforge_update_mailbox",
+    "inputs": [
+      "mailboxID",
+      "firstName",
+      "lastName",
+      "signature",
+      "forwardingEmail"
+    ]
+  },
+  {
+    "name": "infraforge_purchase_mailboxes",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "infraforge_delete_mailbox",
+    "inputs": [
+      "mailboxID"
+    ]
+  },
+  {
+    "name": "infraforge_generate_mailboxes",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "infraforge_bulk_forward_mailboxes",
+    "inputs": [
+      "body"
+    ]
+  },
+  {
+    "name": "infraforge_list_workspaces",
+    "inputs": []
+  },
+  {
+    "name": "infraforge_create_workspace",
+    "inputs": [
+      "name",
+      "attachUniqueIp"
+    ]
+  },
+  {
+    "name": "infraforge_update_workspace",
+    "inputs": [
+      "workspaceID",
+      "name"
+    ]
+  },
+  {
+    "name": "infraforge_delete_workspace",
+    "inputs": [
+      "workspaceID"
+    ]
+  },
+  {
+    "name": "infraforge_export_mailboxes",
+    "inputs": [
+      "workspaceID",
+      "body"
+    ]
+  },
+  {
+    "name": "infraforge_export_to_salesforge",
+    "inputs": [
+      "body"
+    ]
+  }
+]

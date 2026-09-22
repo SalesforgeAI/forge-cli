@@ -34,8 +34,9 @@ export class ApiExecutor {
 
     const url = buildUrl(request.baseUrl ?? product.baseUrl, request.path, request.query);
     const headers: Record<string, string> = {
+      ...request.headers,
       Authorization: product.authScheme === "bearer" ? withBearerPrefix(key) : key,
-      Accept: request.raw ? "*/*" : "application/json",
+      Accept: request.raw ? "*/*" : request.text ? "text/plain" : "application/json",
       "X-Source": "forge-cli",
     };
 
@@ -91,7 +92,8 @@ export class ApiExecutor {
     }
 
     const text = await response.text();
-    if (!text.trim()) return undefined;
+    if (!text.trim()) return {};
+    if (request.text) return text;
     return JSON.parse(text) as unknown;
   }
 }

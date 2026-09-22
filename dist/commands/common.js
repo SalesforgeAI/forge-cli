@@ -1,3 +1,4 @@
+import { SALESFORGE_MULTICHANNEL_BASE_URL } from "../types.js";
 const enc = encodeURIComponent;
 export const pagingParams = [param("limit", "number"), param("offset", "number")];
 export const enrichmentParams = [param("personIDs", "array"), param("people", "array"), param("webhookURL"), param("clientRequestID")];
@@ -19,6 +20,9 @@ export function param(name, type = "string", required = false, description) {
 }
 export function salesforgeApi(method, path, options = {}) {
     return { product: "salesforge", method, path, ...options };
+}
+export function multichannelApi(method, path, options = {}) {
+    return { product: "salesforge", method, path, baseUrl: SALESFORGE_MULTICHANNEL_BASE_URL, ...options };
 }
 export function api(product, method, path, options = {}) {
     return { product, method, path, ...options };
@@ -58,9 +62,10 @@ export function encStr(value) {
     return enc(String(value));
 }
 export function appendArrayQuery(query, key, value) {
-    if (!Array.isArray(value))
+    if (value === undefined || value === null)
         return;
-    query[key] = value.map(String);
+    const items = Array.isArray(value) ? value : [value];
+    query[key] = items.map(String);
 }
 export function assertEnrichment(args) {
     const hasIDs = Array.isArray(args.personIDs) && args.personIDs.length > 0;

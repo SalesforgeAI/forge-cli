@@ -5,16 +5,7 @@ const enc = encodeURIComponent;
 
 export type ReqArgs = JsonObject;
 
-type CommandInput = {
-  name: string;
-  product: ProductId;
-  group: string;
-  subcommand: string;
-  description: string;
-  params?: ParamDefinition[];
-  request: (args: ReqArgs) => ApiRequest;
-  aliases?: string[][];
-};
+type CommandInput = CommandDefinition;
 
 export const pagingParams = [param("limit", "number"), param("offset", "number")];
 export const enrichmentParams = [param("personIDs", "array"), param("people", "array"), param("webhookURL"), param("clientRequestID")];

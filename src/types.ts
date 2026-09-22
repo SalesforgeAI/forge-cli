@@ -1,3 +1,5 @@
+import type { z } from "zod";
+
 export const CLI_VERSION = "0.1.0";
 
 export type JsonPrimitive = string | number | boolean | null;
@@ -116,6 +118,8 @@ export interface ApiRequest {
   query?: Record<string, unknown>;
   body?: unknown;
   raw?: boolean;
+  text?: boolean;
+  headers?: Record<string, string>;
   baseUrl?: string;
 }
 
@@ -127,5 +131,7 @@ export interface CommandDefinition {
   description: string;
   params?: ParamDefinition[];
   aliases?: string[][];
+  inputSchema?: z.ZodObject;
+  execute?: (args: JsonObject, request: (request: ApiRequest) => Promise<unknown>) => Promise<unknown>;
   request: (args: JsonObject) => ApiRequest;
 }

@@ -279,7 +279,9 @@ async function executeCommand(command: CommandDefinition, argTokens: readonly st
   const args = await buildToolArguments(argTokens, commandInputSchema(command), context.stdin);
   validateCommandArgs(command, args);
   const executor = createExecutor(runtime, context);
-  const result = await executor.execute(command.request(args));
+  const result = command.execute
+    ? await command.execute(args, (request) => executor.execute(request))
+    : await executor.execute(command.request(args));
   writeData(context.stdout, result, context.globals);
   return 0;
 }

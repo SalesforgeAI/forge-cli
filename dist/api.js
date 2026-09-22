@@ -18,10 +18,11 @@ export class ApiExecutor {
                 exitCode: 3,
             });
         }
-        const url = buildUrl(product.baseUrl, request.path, request.query);
+        const url = buildUrl(request.baseUrl ?? product.baseUrl, request.path, request.query);
         const headers = {
+            ...request.headers,
             Authorization: product.authScheme === "bearer" ? withBearerPrefix(key) : key,
-            Accept: request.raw ? "*/*" : "application/json",
+            Accept: request.raw ? "*/*" : request.text ? "text/plain" : "application/json",
             "X-Source": "forge-cli",
         };
         const init = {
@@ -73,7 +74,9 @@ export class ApiExecutor {
         }
         const text = await response.text();
         if (!text.trim())
-            return undefined;
+            return {};
+        if (request.text)
+            return text;
         return JSON.parse(text);
     }
 }

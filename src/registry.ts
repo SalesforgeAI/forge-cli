@@ -1,4 +1,6 @@
 import { clean } from "./commands/common.js";
+import { z } from "zod";
+import { usageError } from "./errors.js";
 import { commands } from "./commands/index.js";
 import type { CommandDefinition, JsonObject, ParamDefinition, ProductId } from "./types.js";
 
@@ -33,6 +35,7 @@ export function commandsForProduct(product: ProductId): CommandDefinition[] {
 }
 
 export function commandInputSchema(command: CommandDefinition): JsonObject {
+  if (command.inputSchema) return z.toJSONSchema(command.inputSchema, { io: "input" }) as JsonObject;
   const properties: JsonObject = {};
   const required: string[] = [];
   for (const input of command.params ?? []) {
@@ -50,9 +53,16 @@ export function commandInputSchema(command: CommandDefinition): JsonObject {
 }
 
 export function validateCommandArgs(command: CommandDefinition, args: JsonObject): void {
+  if (command.inputSchema) {
+    const result = command.inputSchema.safeParse(args);
+    if (!result.success) {
+      throw usageError(result.error.issues.map((issue) => `${issue.path.join(".") || "input"}: ${issue.message}`).join("; "));
+    }
+    return;
+  }
   for (const input of command.params ?? []) {
     if (input.required && args[input.name] === undefined) {
-      throw new Error(`Missing required option --${toKebabCase(input.name)}`);
+      throw usageError(`Missing required option --${toKebabCase(input.name)}`);
     }
   }
 }

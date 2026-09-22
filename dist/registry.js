@@ -1,4 +1,6 @@
 import { clean } from "./commands/common.js";
+import { z } from "zod";
+import { usageError } from "./errors.js";
 import { commands } from "./commands/index.js";
 export { commands };
 export function findCommand(tokensOrName) {
@@ -29,6 +31,8 @@ export function commandsForProduct(product) {
     return commands.filter((command) => command.product === product);
 }
 export function commandInputSchema(command) {
+    if (command.inputSchema)
+        return z.toJSONSchema(command.inputSchema, { io: "input" });
     const properties = {};
     const required = [];
     for (const input of command.params ?? []) {
@@ -46,9 +50,16 @@ export function commandInputSchema(command) {
     });
 }
 export function validateCommandArgs(command, args) {
+    if (command.inputSchema) {
+        const result = command.inputSchema.safeParse(args);
+        if (!result.success) {
+            throw usageError(result.error.issues.map((issue) => `${issue.path.join(".") || "input"}: ${issue.message}`).join("; "));
+        }
+        return;
+    }
     for (const input of command.params ?? []) {
         if (input.required && args[input.name] === undefined) {
-            throw new Error(`Missing required option --${toKebabCase(input.name)}`);
+            throw usageError(`Missing required option --${toKebabCase(input.name)}`);
         }
     }
 }

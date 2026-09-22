@@ -191,14 +191,16 @@ export async function buildToolArguments(
     }
     const key = param.slice(0, separator);
     const value = param.slice(separator + 1);
-    args[resolveSchemaKey(key, inputSchema)] = coerceCliValue(value);
+    const resolved = resolveSchemaKey(key, inputSchema);
+    args[resolved] = coerceSchemaValue(value, resolved, inputSchema);
   }
 
   for (const [rawName, values] of parsed.flags) {
     if (rawName === "json" || rawName === "file" || rawName === "stdin" || rawName === "param") continue;
     const key = resolveSchemaKey(rawName, inputSchema);
-    const coercedValues = values.map((value) => coerceCliValue(value));
-    args[key] = coercedValues.length === 1 ? coercedValues[0]! : coercedValues;
+    const coercedValues = values.map((value) => coerceSchemaValue(value, key, inputSchema));
+    const property = getSchemaProperties(inputSchema)[key] as JsonObject | undefined;
+    args[key] = property?.type === "array" ? coercedValues.flat() : coercedValues.length === 1 ? coercedValues[0]! : coercedValues;
   }
 
   return args;
@@ -224,6 +226,17 @@ export function coerceCliValue(value: string): JsonValue {
   }
 
   return value;
+}
+
+/** Preserve string IDs, passwords, and OTPs while coercing typed flags and array items. */
+function coerceSchemaValue(value: string, key: string, inputSchema?: JsonObject): JsonValue {
+  const property = getSchemaProperties(inputSchema)[key] as JsonObject | undefined;
+  if (property?.type === "string") return value;
+  if (property?.type === "array" && !value.trim().startsWith("[")) {
+    const items = property.items as JsonObject | undefined;
+    return [items?.type === "string" ? value : coerceCliValue(value)];
+  }
+  return coerceCliValue(value);
 }
 
 export function resolveSchemaKey(rawName: string, inputSchema?: JsonObject): string {

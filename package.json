@@ -15,6 +15,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "sync:public-api": "node scripts/sync-public-api.mjs",
+    "check:public-api": "node scripts/sync-public-api.mjs --check",
     "prepack": "npm run build",
     "prepublishOnly": "npm run typecheck"
   },
