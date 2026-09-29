@@ -1,6 +1,6 @@
 {
   "name": "@salesforge/forge-cli",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "CLI and MCP server for the Salesforge product suite",
   "type": "module",
   "bin": {
